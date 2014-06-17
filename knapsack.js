@@ -62,7 +62,7 @@ $(function(){
     });
     
     function updateRecords(){
-        $('#records').append("($"+value+", "+weight+"kg)<br>");
+        $('#records').append("($"+value+", "+weight+"kg)");
     }
     
     //redraws pie chart and text for value and weight
