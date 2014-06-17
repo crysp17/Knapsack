@@ -15,8 +15,8 @@ $(function(){
     
     //flashes the too heavy warning
     function tooHeavy(){
-        $('#warning').fadeIn(500);
-        $('#warning').fadeOut(500);
+        $('#warning').fadeIn(700);
+        $('#warning').fadeOut(700);
     }
     
     //takes a thing from the house and puts it in the knapsack, adjusts weight and value
@@ -24,12 +24,14 @@ $(function(){
         var new_weight =weight+ parseInt($(thing).data('weight'));
         if(new_weight <= maxweight){
             thing.remove();
+            (new Audio('steal.mp3')).play();
             $('#knapsack_things').append(thing);
             $(thing).data('location','knapsack');
             weight=new_weight;
             value += parseInt($(thing).data('value'));
         }
         else{
+            (new Audio('tooheavy.mp3')).play();
             tooHeavy();
         }
     }
@@ -37,6 +39,7 @@ $(function(){
     //returns thing from to knapsack to the house, adjusts weight and value
     function replace(thing){
         thing.remove();
+        (new Audio('replace.mp3')).play();
         $('#house_things').append(thing);
         $(thing).data('location','house');
         weight -= parseInt($(thing).data('weight'));
@@ -47,12 +50,10 @@ $(function(){
         //if the thing is in the house, it is stolen
         if ($(this).data('location') == 'house'){
             steal(this);
-            console.log('stolen');
         }
         //if it is already in the knapsack, it is replaced
         else{
             replace(this);
-            console.log('replaced');
         }
         //updates the total value and weight in the knapsack
         $('#info').html("($"+value+", "+weight+"kg)<br>")
@@ -66,8 +67,19 @@ $(function(){
     });
     
     function updateRecords(){
-        
-        $('#records').append("($"+value+", "+weight+"kg):<br>")
+        var knapsackThings=$('#knapsack .thing');
+        var knapString='';      //string of the names of all the things in the knapsack
+        for (var i =0; i<knapsackThings.length; i++){
+            knapString += $(knapsackThings[i]).data('name') + ", ";
+        }
+        //removes last comma
+        knapString=knapString.slice(0,-2);
+        //displays the value, weight, and things in the knapsack
+        var recHistory=$('#recordHistory')
+        recHistory.append("($"+value+", "+weight+"kg): "+knapString+"<br>");
+        (new Audio('record.mp3')).play();
+        //scrolls to the latest record
+        recHistory.animate({scrollTop: recHistory[0].scrollHeight},1000);
     }
     
     //redraws pie chart and text for value and weight
@@ -111,8 +123,8 @@ $(function(){
     
     $('#info').append("($"+value+", "+weight+"kg)<br>")
         
-    var w = 300,                        //width
-    h = 300,                            //height
+    var w = 230,                        //width
+    h = 230,                            //height
     r = 100,                            //radius
     color = ['green','red']     //colors for slices
     var data = [{"label":"full", "value":weight}, 

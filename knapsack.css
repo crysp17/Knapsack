@@ -23,8 +23,18 @@ body{
 }
 
 .things img{
-    width:100px;
-    
+    width:100px;  
+}
+
+#recordHistory{
+    height: 206px;
+    width:350px;
+    font-size: 20px;
+    overflow-y: auto;
+    margin: 5px;
+    border-width:1px;
+    border-color:black;
+    border-style:solid;
 }
 
 .header img{
@@ -36,13 +46,14 @@ body{
 }
 
 #warning{
-    width:200px;
-    height:50px;
+    width:400px;
+    height:80px;
     background:red;
-    font-size: 30px;
+    font-size: 60px;
     position:absolute;
-    left:300px;
+    left:200px;
     top:200px;
+    text-align:center;
 }
 
 .footer{
