@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="knapsack.css" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src='knapsack.js'></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+    <rect id='warning'>
+        TOO HEAVY!!
+    </rect>
+    <div class='location' id='house'>
+        <div class='header' id='house_header'>
+            <img src='house.png'>
+        </div>
+        <div class='things' id='house_things'>
+            <div class='thing'><img src="clock.png" data-value="175" data-weight="10" data-name="clock"><br>$175,10kg</div>
+            <div class='thing'><img src="painting.png" data-value="90" data-weight="9" data-name="painting"><br>$90,9kg</div>
+            <div class='thing'><img src="radio.png" data-value="20" data-weight="4" data-name="radio"><br>$20,4kg</div>
+            <div class='thing'><img src="vase.png" data-value="50" data-weight="2" data-name="vase"><br>$50,2kg</div>
+            <div class='thing'><img src="book.png" data-value="10" data-weight="1" data-name="book"><br>$10,1kg</div>
+            <div class='thing'><img src="computer.png" data-value="200" data-weight="20" data-name="computer"><br>$200,20kg</div>
+        </div>
+        <div class='footer' id='house_footer'>
+            Click item to move to knapsack
+        </div>
+    </div>
+    <div class='location' id='knapsack'>
+        <div class='header' id='knapsack_header'>
+            <img src='burglar.png'>
+        </div>
+        <div class='things' id='knapsack_things'>
+        </div>
+        <div class='footer' id='knapsack_footer'>
+            Click item to move to house
+        </div>
+
+    </div>
+    <div id='info'>($0, 0kg)</div>
+</body>
+</html>

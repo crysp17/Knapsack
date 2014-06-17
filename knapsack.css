@@ -1,0 +1,35 @@
+.location{
+    float:left;
+    margin:20px;
+}
+
+.things{
+    width:350px;
+    height:350px;
+    border-width:1px;
+    border-color:black;
+    border-style:solid;
+}
+
+.thing{
+    display: inline-block;
+}
+
+.things img{
+    width:100px;
+}
+
+.header img{
+    height:100px;
+    margin:10px;
+}
+
+rect{
+    width:200px;
+    height:50px;
+    background:red;
+    font-size: 30px;
+    position:absolute;
+    left:300px;
+    top:200px;
+}
