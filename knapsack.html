@@ -15,18 +15,18 @@
             <img src='house.png'>
         </div>
         <div class='things' id='house_things'>
-            <div class='thing'><img src="clock.png" data-value="175" data-weight="10" data-name="clock"><br>$175,10kg</div>
-            <div class='thing'><img src="painting.png" data-value="90" data-weight="9" data-name="painting"><br>$90,9kg</div>
-            <div class='thing'><img src="radio.png" data-value="20" data-weight="4" data-name="radio"><br>$20,4kg</div>
-            <div class='thing'><img src="vase.png" data-value="50" data-weight="2" data-name="vase"><br>$50,2kg</div>
-            <div class='thing'><img src="book.png" data-value="10" data-weight="1" data-name="book"><br>$10,1kg</div>
-            <div class='thing'><img src="computer.png" data-value="200" data-weight="20" data-name="computer"><br>$200,20kg</div>
+            <div class='thing' data-value="175" data-weight="10" data-name="clock"><img src="clock.png"></div>
+            <div class='thing' data-value="90" data-weight="9" data-name="painting"><img src="painting.png"></div>
+            <div class='thing' data-value="20" data-weight="4" data-name="radio"><img src="radio.png"></div>
+            <div class='thing' data-value="50" data-weight="2" data-name="vase"><img src="vase.png"></div>
+            <div class='thing' data-value="10" data-weight="1" data-name="book"><img src="book.png"></div>
+            <div class='thing' data-value="200" data-weight="20" data-name="computer"><img src="computer.png"></div>
         </div>
         <div class='footer' id='house_footer'>
             Click item to move to knapsack
         </div>
     </div>
-    <div class='location' id='knapsack'>
+    <div class='location' id='knapsack' data-maxweight="20">
         <div class='header' id='knapsack_header'>
             <img src='burglar.png'>
         </div>
@@ -37,6 +37,13 @@
         </div>
 
     </div>
-    <div id='info'>($0, 0kg)</div>
+    <div id='info'>
+    </div>
+    <div id='records'>
+        <input name="recordButton" 
+               type="button" 
+               value="Record" 
+               onclick="updateRecords()" />
+    </div>
 </body>
 </html>

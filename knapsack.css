@@ -1,3 +1,7 @@
+body{
+    font-family:Calibri
+}
+
 .location{
     float:left;
     margin:20px;
@@ -13,18 +17,25 @@
 
 .thing{
     display: inline-block;
+    text-align:center;
+    font-style: italic;
+    margin:5px;
 }
 
 .things img{
     width:100px;
+    
 }
 
 .header img{
     height:100px;
     margin:10px;
+    display:block;
+    margin-left: auto;
+    margin-right:auto;
 }
 
-rect{
+#warning{
     width:200px;
     height:50px;
     background:red;
@@ -33,3 +44,8 @@ rect{
     left:300px;
     top:200px;
 }
+
+.footer{
+    text-align:center;
+}
+

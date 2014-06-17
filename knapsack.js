@@ -2,11 +2,15 @@ $(function(){
     var things=$('.thing');
     var weight=0;
     var value=0;
+    var maxweight=parseInt($('#knapsack').data('maxweight'))
     $('#warning').hide();
     
     //all the things start off in the house
     for (var i=0; i < things.length;i++){
-        things[i].location='house';
+        var t = $(things[i])
+        t.data('location','house');
+        t.append("<br>$"+t.data('value')+", "+t.data('weight')+"kg")
+
     }
     
     //flashes the too heavy warning
@@ -17,48 +21,96 @@ $(function(){
     
     //takes a thing from the house and puts it in the knapsack, adjusts weight and value
     function steal(thing){
-        var new_weight =weight+ parseInt($(thing).attr('data-weight'));
-        if(new_weight <=20){
+        var new_weight =weight+ parseInt($(thing).data('weight'));
+        if(new_weight <= maxweight){
             thing.remove();
             $('#knapsack_things').append(thing);
-            thing.location='knapsack';
+            $(thing).data('location','knapsack');
             weight=new_weight;
-            value += parseInt($(thing).attr('data-value'));
+            value += parseInt($(thing).data('value'));
         }
-        //if the weight with the new thing is too heavy, flashes warning
         else{
             tooHeavy();
         }
     }
     
-    //returns thing from to knapsack to the house, adjsuts weight and value
+    //returns thing from to knapsack to the house, adjusts weight and value
     function replace(thing){
         thing.remove();
         $('#house_things').append(thing);
-        thing.location='house';
-        weight -= parseInt($(thing).attr('data-weight'));
-        value -= parseInt($(thing).attr('data-value'));
+        $(thing).data('location','house');
+        weight -= parseInt($(thing).data('weight'));
+        value -= parseInt($(thing).data('value'));
     }
     
     things.click(function(event){
         //if the thing is in the house, it is stolen
-        if (this.location == 'house'){
+        if ($(this).data('location') == 'house'){
             steal(this);
+            console.log('stolen');
         }
         //if it is already in the knapsack, it is replaced
         else{
             replace(this);
+            console.log('replaced');
         }
         //updates the total value and weight in the knapsack
-        $('#info').html("($"+value+", "+weight+"kg)")
+        $('#info').html("($"+value+", "+weight+"kg)<br>")
+        
+        updateInfo();
         
     });
+    
+    function updateRecords(){
+        $('#records').append("($"+value+", "+weight+"kg)<br>");
+    }
+    
+    //redraws pie chart and text for value and weight
+    function updateInfo(){
+        //updates values
+        var data = [{"label":"full", "value":weight}, 
+            {"label":"empty", "value":20-weight}];
+    
+        //get the data and set width, height, location
+        var vis = d3.select("#info")
+            .append("svg:svg")             
+            .data([data])                  
+                .attr("width", w)          
+                .attr("height", h)
+            .append("svg:g")               
+                .attr("transform", "translate(" + r + "," + r + ")")    
+        
+        //recreates slices (of pie) for new data
+        var arcs = vis.selectAll("g.slice")
+            .data(pie)                          
+            .enter()
+                .append("svg:g")               
+                    .attr("class", "slice");  
+        
+            //colors slices
+            arcs.append("svg:path")
+                    .attr("fill", function(d, i) { return color[i]; } ) 
+                    .attr("d", arc); 
+        
+            //adds the labels
+            arcs.append("svg:text")                                     
+                    .attr("transform", function(d) {                    
+                    d.innerRadius = 0;
+                    d.outerRadius = r;
+                    return "translate(" + arc.centroid(d) + ")";      
+                })
+                .attr("text-anchor", "middle")
+                //if there slice doesn't exist, doesn't display label for it
+                .text(function(d, i) { if (data[i].value != 0){return data[i].label; }}); 
+    }
+    
+    $('#info').append("($"+value+", "+weight+"kg)<br>")
         
     var w = 300,                        //width
     h = 300,                            //height
     r = 100,                            //radius
-    color = d3.scale.category20c();     //builtin range of colors
-    data = [{"label":"full", "value":weight}, 
+    color = ['green','red']     //colors for slices
+    var data = [{"label":"full", "value":weight}, 
             {"label":"empty", "value":20-weight}];
     
     var vis = d3.select("#info")
@@ -75,14 +127,14 @@ $(function(){
     var pie = d3.layout.pie()           //this will create arc data for us given a list of values
         .value(function(d) { return d.value; });   
 
-    var arcs = vis.selectAll("g.slice")
+    var arcs = vis.selectAll("g.slice")     //create pie slices
         .data(pie)                          
         .enter()
             .append("svg:g")               
                 .attr("class", "slice");   
 
-        arcs.append("svg:path")
-                .attr("fill", function(d, i) { return color(i); } ) 
+        arcs.append("svg:path")     //color in the slices
+                .attr("fill", function(d, i) { return color[i]; } ) 
                 .attr("d", arc);                                    
 
         arcs.append("svg:text")                                     //add a label to each slice
@@ -95,6 +147,7 @@ $(function(){
             .attr("text-anchor", "middle")                          //center the text on it's origin
             .text(function(d, i) { return data[i].label; });        //get the label from our original data array
         
-    
+
+
     
 });
