@@ -7,12 +7,22 @@
   <script src="http://d3js.org/d3.v3.min.js"></script>
 </head>
 <body>
+    <rect id='intro'>
+        <br>Your friendly neighbor's house<br>
+        has sooo many nice things. <br>
+        You have a knapsack that<br>
+        can carry 20 kg. <br>
+        Click to start stealing!
+    </rect>
     <rect id='warning'>
         TOO HEAVY!!
     </rect>
+    <input id="muteButton" 
+        type="button"/>
     <div class='location' id='house'>
         <div class='header' id='house_header'>
             <img src='house.png'>
+            House
         </div>
         <div class='things' id='house_things'>
             <div class='thing' data-value="175" data-weight="10" data-name="clock"><img src="clock.png"></div>
@@ -29,6 +39,7 @@
     <div class='location' id='knapsack' data-maxweight="20">
         <div class='header' id='knapsack_header'>
             <img src='burglar.png'>
+            Knapsack
         </div>
         <div class='things' id='knapsack_things'>
         </div>
@@ -42,7 +53,11 @@
     <div id='records'>
         <input id="recordButton" 
                type="button" 
-               value="Record Items in Knapsack"  /><br>
+               value="Record Contents Of Knapsack"  />
+        <input id="clearButton" 
+               type="button" 
+               value="Clear Records"  />
+        <br>
         <div id='recordHistory'>
         </div>
     </div>

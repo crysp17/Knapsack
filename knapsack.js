@@ -4,6 +4,9 @@ $(function(){
     var value=0;
     var maxweight=parseInt($('#knapsack').data('maxweight'))
     $('#warning').hide();
+    var mute=$('#muteButton');
+    mute.data('setting','sound');
+    mute.css('background-image', 'url("sound.png")');
     
     //all the things start off in the house
     for (var i=0; i < things.length;i++){
@@ -22,28 +25,40 @@ $(function(){
     //takes a thing from the house and puts it in the knapsack, adjusts weight and value
     function steal(thing){
         var new_weight =weight+ parseInt($(thing).data('weight'));
+        var new_thing=$(thing);
         if(new_weight <= maxweight){
+            new_thing.hide();
             thing.remove();
-            (new Audio('steal.mp3')).play();
+            if (mute.data('setting')=='sound'){
+                (new Audio('steal.mp3')).play();
+            }
             $('#knapsack_things').append(thing);
-            $(thing).data('location','knapsack');
+            new_thing.show('slow');
+            new_thing.data('location','knapsack');
             weight=new_weight;
-            value += parseInt($(thing).data('value'));
+            value += parseInt(new_thing.data('value'));
         }
         else{
-            (new Audio('tooheavy.mp3')).play();
+            if (mute.data('setting')=='sound'){
+                (new Audio('tooheavy.mp3')).play();
+            }
             tooHeavy();
         }
     }
     
     //returns thing from to knapsack to the house, adjusts weight and value
     function replace(thing){
+        var new_thing=$(thing);
+        new_thing.hide();
         thing.remove();
-        (new Audio('replace.mp3')).play();
+        if (mute.data('setting')=='sound'){
+                (new Audio('replace.mp3')).play();
+        }
         $('#house_things').append(thing);
-        $(thing).data('location','house');
-        weight -= parseInt($(thing).data('weight'));
-        value -= parseInt($(thing).data('value'));
+        new_thing.show('slow');
+        new_thing.data('location','house');
+        weight -= parseInt(new_thing.data('weight'));
+        value -= parseInt(new_thing.data('value'));
     }
     
     things.click(function(event){
@@ -66,6 +81,26 @@ $(function(){
         updateRecords();
     });
     
+    $('#clearButton').click(function(event){
+        clearRecords();
+    });
+    
+    mute.click(function(event){
+        if(mute.data('setting')=='sound'){
+            mute.data('setting','mute'); 
+            mute.css('background-image', 'url("mute.png")'); 
+        }
+        else{
+            mute.data('setting','sound');
+            mute.css('background-image', 'url("sound.png")');
+        }
+    });
+    
+    $('#intro').click(function(event){
+        $('#intro').remove();
+    });
+    
+    //update records of certain things
     function updateRecords(){
         var knapsackThings=$('#knapsack .thing');
         var knapString='';      //string of the names of all the things in the knapsack
@@ -77,11 +112,19 @@ $(function(){
         //displays the value, weight, and things in the knapsack
         var recHistory=$('#recordHistory')
         recHistory.append("($"+value+", "+weight+"kg): "+knapString+"<br>");
-        (new Audio('record.mp3')).play();
+        //plays audio of someone writing
+        if (mute.data('setting')=='sound'){
+                (new Audio('record.mp3')).play();
+        }
         //scrolls to the latest record
         recHistory.animate({scrollTop: recHistory[0].scrollHeight},1000);
     }
     
+    
+    function clearRecords(){
+        var recHistory=$('#recordHistory');
+        recHistory.html('');
+    }
     //redraws pie chart and text for value and weight
     function updateInfo(){
         //updates values
@@ -95,7 +138,7 @@ $(function(){
                 .attr("width", w)          
                 .attr("height", h)
             .append("svg:g")               
-                .attr("transform", "translate(" + r + "," + r + ")")    
+                .attr("transform", "translate(" + 175 + "," + r + ")")    
         
         //recreates slices (of pie) for new data
         var arcs = vis.selectAll("g.slice")
@@ -117,26 +160,30 @@ $(function(){
                     return "translate(" + arc.centroid(d) + ")";      
                 })
                 .attr("text-anchor", "middle")
-                //if there slice doesn't exist, doesn't display label for it
-                .text(function(d, i) { if (data[i].value != 0){return data[i].label; }}); 
+                //if the slice doesn't exist, doesn't display label for it
+                .text(function(d, i) {
+                    if (data[i].value != 0){
+                        return data[i].label; 
+                    }
+                }); 
     }
     
     $('#info').append("($"+value+", "+weight+"kg)<br>")
         
-    var w = 230,                        //width
+    var w = 350,                        //width
     h = 230,                            //height
     r = 100,                            //radius
-    color = ['green','red']     //colors for slices
+    color = ['MediumAquaMarine','grey']     //colors for slices
     var data = [{"label":"full", "value":weight}, 
             {"label":"empty", "value":20-weight}];
     
     var vis = d3.select("#info")
-        .append("svg:svg")              //create the SVG element inside the <body>
+        .append("svg:svg")              //create the SVG element
         .data([data])                   //associate our data with the document
             .attr("width", w)          
             .attr("height", h)
         .append("svg:g")               
-            .attr("transform", "translate(" + r + "," + r + ")")    //move the center of the pie chart from 0, 0 to radius, radius
+            .attr("transform", "translate(" + 175 + "," + r + ")")    //move the center of the pie chart from 0, 0 to radius, radius
 
     var arc = d3.svg.arc()              //this will create <path> elements for us using arc data
         .outerRadius(r);
@@ -163,8 +210,6 @@ $(function(){
             })
             .attr("text-anchor", "middle")                          //center the text on it's origin
             .text(function(d, i) { return data[i].label; });        //get the label from our original data array
-        
-
 
     
 });

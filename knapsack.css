@@ -7,12 +7,40 @@ body{
     margin:20px;
 }
 
-.things{
-    width:350px;
-    height:350px;
-    border-width:1px;
+#intro{
+    position:absolute;
+    left:200px;
+    top:100px;
+    color:white;
+    background-color:grey;
+    width:400px;
+    height:200px;
+    text-align: center;
+    font-size: 24px;
+}
+
+#knapsack_things{
+    border-radius: 60px;
+    background-color: #CAC0D1;
+    border-width:2px;
     border-color:black;
     border-style:solid;
+    width:270px;
+    height:330px;
+    padding-left:40px;
+    padding-right:40px;
+    padding-top:20px;
+}
+
+#house_things{
+    background-image:url('shelves.png');
+    width:270px;
+    height:290px;
+    padding-left:40px;
+    padding-right:40px;
+    padding-top:60px;
+    color:white;
+
 }
 
 .thing{
@@ -23,11 +51,12 @@ body{
 }
 
 .things img{
-    width:100px;  
+    padding-top:20px;
+    width:75px;  
 }
 
 #recordHistory{
-    height: 206px;
+    height: 232px;
     width:350px;
     font-size: 20px;
     overflow-y: auto;
@@ -35,6 +64,11 @@ body{
     border-width:1px;
     border-color:black;
     border-style:solid;
+}
+
+.header{
+    text-align:center;
+    font-size:20px;
 }
 
 .header img{
@@ -60,3 +94,13 @@ body{
     text-align:center;
 }
 
+#muteButton{
+    width:50px;
+    height:50px;
+    position:absolute;
+    left:1095px;
+    top:20px;
+    border:0;
+    padding:0;
+    border-radius: 8px;
+}
