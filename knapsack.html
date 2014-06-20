@@ -7,17 +7,19 @@
   <script src="http://d3js.org/d3.v3.min.js"></script>
 </head>
 <body>
-    <rect id='intro'>
+    <rect id='intro' class='clickable'>
         <br>Your friendly neighbor's house<br>
         has sooo many nice things. <br>
         You have a knapsack that<br>
         can carry 20 kg. <br>
         Click to start stealing!
     </rect>
-    <rect id='warning'>
+    <rect id='warning' class='clickable'>
         TOO HEAVY!!
     </rect>
     <input id="muteButton" 
+        type="button"/>
+    <input id="resetButton" 
         type="button"/>
     <div class='location' id='house'>
         <div class='header' id='house_header'>
@@ -49,6 +51,7 @@
 
     </div>
     <div id='info'>
+        <div id='info-text'></div>
     </div>
     <div id='records'>
         <input id="recordButton" 

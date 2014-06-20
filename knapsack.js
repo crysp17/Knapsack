@@ -5,6 +5,7 @@ $(function(){
     var maxweight=parseInt($('#knapsack').data('maxweight'))
     $('#warning').hide();
     var mute=$('#muteButton');
+    //set the mute button to not muted
     mute.data('setting','sound');
     mute.css('background-image', 'url("sound.png")');
     
@@ -22,6 +23,12 @@ $(function(){
         $('#warning').fadeOut(700);
     }
     
+    function playSound(sound){
+        if (mute.data('setting')=='sound'){
+            (new Audio(sound)).play();
+        }  
+    }
+    
     //takes a thing from the house and puts it in the knapsack, adjusts weight and value
     function steal(thing){
         var new_weight =weight+ parseInt($(thing).data('weight'));
@@ -29,9 +36,7 @@ $(function(){
         if(new_weight <= maxweight){
             new_thing.hide();
             thing.remove();
-            if (mute.data('setting')=='sound'){
-                (new Audio('steal.mp3')).play();
-            }
+            playSound('steal.mp3');
             $('#knapsack_things').append(thing);
             new_thing.show('slow');
             new_thing.data('location','knapsack');
@@ -39,9 +44,7 @@ $(function(){
             value += parseInt(new_thing.data('value'));
         }
         else{
-            if (mute.data('setting')=='sound'){
-                (new Audio('tooheavy.mp3')).play();
-            }
+            playSound('tooheavy.mp3');
             tooHeavy();
         }
     }
@@ -51,9 +54,7 @@ $(function(){
         var new_thing=$(thing);
         new_thing.hide();
         thing.remove();
-        if (mute.data('setting')=='sound'){
-                (new Audio('replace.mp3')).play();
-        }
+        playSound('replace.mp3');
         $('#house_things').append(thing);
         new_thing.show('slow');
         new_thing.data('location','house');
@@ -71,7 +72,6 @@ $(function(){
             replace(this);
         }
         //updates the total value and weight in the knapsack
-        $('#info').html("($"+value+", "+weight+"kg)<br>")
         
         updateInfo();
         
@@ -85,6 +85,8 @@ $(function(){
         clearRecords();
     });
     
+    //mute button changes settings and images when clicked
+    //sounds only play if the setting is to sound
     mute.click(function(event){
         if(mute.data('setting')=='sound'){
             mute.data('setting','mute'); 
@@ -96,6 +98,19 @@ $(function(){
         }
     });
     
+     $('#resetButton').click(function(event){
+        weight=0;
+        value=0;
+        for (i=0; i<things.length; i++){
+            var t=$(things[i]);
+            things[i].remove();
+            $('#house_things').append(things[i]);
+            t.data('location','house');
+        }
+         updateInfo();
+    });
+    
+    //click intro to start 
     $('#intro').click(function(event){
         $('#intro').remove();
     });
@@ -113,9 +128,7 @@ $(function(){
         var recHistory=$('#recordHistory')
         recHistory.append("($"+value+", "+weight+"kg): "+knapString+"<br>");
         //plays audio of someone writing
-        if (mute.data('setting')=='sound'){
-                (new Audio('record.mp3')).play();
-        }
+        playSound('record.mp3');
         //scrolls to the latest record
         recHistory.animate({scrollTop: recHistory[0].scrollHeight},1000);
     }
@@ -127,81 +140,84 @@ $(function(){
     }
     //redraws pie chart and text for value and weight
     function updateInfo(){
-        //updates values
-        var data = [{"label":"full", "value":weight}, 
-            {"label":"empty", "value":20-weight}];
-    
-        //get the data and set width, height, location
-        var vis = d3.select("#info")
-            .append("svg:svg")             
-            .data([data])                  
-                .attr("width", w)          
-                .attr("height", h)
-            .append("svg:g")               
-                .attr("transform", "translate(" + 175 + "," + r + ")")    
-        
-        //recreates slices (of pie) for new data
-        var arcs = vis.selectAll("g.slice")
-            .data(pie)                          
-            .enter()
-                .append("svg:g")               
-                    .attr("class", "slice");  
-        
-            //colors slices
-            arcs.append("svg:path")
-                    .attr("fill", function(d, i) { return color[i]; } ) 
-                    .attr("d", arc); 
-        
-            //adds the labels
-            arcs.append("svg:text")                                     
-                    .attr("transform", function(d) {                    
-                    d.innerRadius = 0;
-                    d.outerRadius = r;
-                    return "translate(" + arc.centroid(d) + ")";      
-                })
-                .attr("text-anchor", "middle")
-                //if the slice doesn't exist, doesn't display label for it
-                .text(function(d, i) {
-                    if (data[i].value != 0){
-                        return data[i].label; 
-                    }
-                }); 
+        $('#info-text').html("($"+value+", "+weight+"kg)<br>")
+        pie.value(function(d) { return d[weight]; }); // change the value function
+        path = path.data(pie); // compute the new angles
+        path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+    }
+
+        // Store the displayed angles in _current.
+        // Then, interpolate from _current to the new angles.
+        // During the transition, _current is updated in-place by d3.interpolate.
+    function arcTween(a) {
+          var i = d3.interpolate(this._current, a);
+          this._current = i(0);
+          return function(t) {
+            return arc(i(t));
+          };
     }
     
-    $('#info').append("($"+value+", "+weight+"kg)<br>")
+    $('#info-text').append("($"+value+", "+weight+"kg)<br>")
         
-    var w = 350,                        //width
-    h = 230,                            //height
-    r = 100,                            //radius
-    color = ['MediumAquaMarine','grey']     //colors for slices
-    var data = [{"label":"full", "value":weight}, 
-            {"label":"empty", "value":20-weight}];
+    var width = 300,
+        height = 250,
+        radius = 100;
+
+    var color = ['MediumAquaMarine','grey'];
+
+    var pie = d3.layout.pie()
+        .value(function(d) { return d[weight]; })
+        .sort(null);
+
+    var arc = d3.svg.arc()
+        .innerRadius(0)
+        .outerRadius(radius);
+
+    var dic1={'label':'full'};
+    var dic2={'label':'empty'};
+    for (var i=0; i <= maxweight; i++){
+        dic1[i]=i;
+        dic2[i]=20-i;
+    }
+    var data = [dic1, dic2];
+
+    var svg = d3.select('#info').append("svg:svg")
+        .attr("width", width)
+        .attr("height", height)
+      .append("svg:g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var path = svg.datum(data).selectAll("path")
+    .data(pie)
+    .enter().append("path")
+    .attr("fill", function(d, i) { return color[i]; })
+    .attr("d", arc)
+    .each(function(d) { this._current = d; }); // store the initial angles   
     
-    var vis = d3.select("#info")
-        .append("svg:svg")              //create the SVG element
-        .data([data])                   //associate our data with the document
-            .attr("width", w)          
-            .attr("height", h)
-        .append("svg:g")               
-            .attr("transform", "translate(" + 175 + "," + r + ")")    //move the center of the pie chart from 0, 0 to radius, radius
+      count = 0;
+      var legend = svg.selectAll(".legend")
+          .data(data).enter()
+          .append("g").attr("class", "legend")
+          .attr("legend-id", function(d) {
+              return count++;
+          })
+          .attr("transform", function(d, i) {
+              return "translate(-30," + (60 + i * 20) + ")";
+          });
 
-    var arc = d3.svg.arc()              //this will create <path> elements for us using arc data
-        .outerRadius(r);
+      legend.append("rect")
+          .attr("x", width / 2)
+          .attr("width", 18).attr("height", 18)
+          .style("fill", function(d,i) {
+              return color[i];
+          });
+      legend.append("text").attr("x", width / 2)
+          .attr("y", 9).attr("dy", ".35em")
+          .style("text-anchor", "end").text(function(d) {
+              return d['label'];
+          });
 
-    var pie = d3.layout.pie()           //this will create arc data for us given a list of values
-        .value(function(d) { return d.value; });   
-
-    var arcs = vis.selectAll("g.slice")     //create pie slices
-        .data(pie)                          
-        .enter()
-            .append("svg:g")               
-                .attr("class", "slice");   
-
-        arcs.append("svg:path")     //color in the slices
-                .attr("fill", function(d, i) { return color[i]; } ) 
-                .attr("d", arc);                                    
-
-        arcs.append("svg:text")                                     //add a label to each slice
+/*        arcs.append("svg:text")                                     //add a label to each slice
                 .attr("transform", function(d) {                    //set the label's origin to the center of the arc
                
                 d.innerRadius = 0;
@@ -209,7 +225,7 @@ $(function(){
                 return "translate(" + arc.centroid(d) + ")";      
             })
             .attr("text-anchor", "middle")                          //center the text on it's origin
-            .text(function(d, i) { return data[i].label; });        //get the label from our original data array
+            .text(function(d, i) { return data[i].label; });        //get the label from our original data array*/
 
     
 });
