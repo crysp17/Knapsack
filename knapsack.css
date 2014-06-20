@@ -1,22 +1,23 @@
 body{
-    font-family:Calibri
+    font-family:Calibri;
+        font-size:12px;
 }
 
 .location{
     float:left;
-    margin:20px;
+    margin:5px;
 }
 
 #intro{
     position:absolute;
-    left:200px;
-    top:100px;
+    left:160px;
+    top:90px;
     color:white;
     background-color:grey;
-    width:400px;
-    height:200px;
+    width:250px;
+    height:130px;
     text-align: center;
-    font-size: 24px;
+    font-size: 16px;
 }
 
 .clickable{
@@ -25,25 +26,25 @@ body{
 }
 
 #knapsack_things{
-    border-radius: 60px;
+    border-radius: 30px;
     background-color: #CAC0D1;
     border-width:2px;
     border-color:black;
     border-style:solid;
-    width:270px;
-    height:330px;
-    padding-left:40px;
-    padding-right:40px;
-    padding-top:20px;
+    width:210px;
+    height:240px;
+    padding-left:20px;
+    padding-right:20px;
+    padding-top:10px;
 }
 
 #house_things{
     background-image:url('shelves.png');
-    width:270px;
-    height:290px;
-    padding-left:40px;
-    padding-right:40px;
-    padding-top:60px;
+    width:200px;
+    height:210px;
+    padding-left:25px;
+    padding-right:25px;
+    padding-top:40px;
     color:white;
 
 }
@@ -52,22 +53,22 @@ body{
     display: inline-block;
     text-align:center;
     font-style: italic;
-    margin:5px;
+    margin:3px;
     cursor: pointer;
     cursor: hand;
 }
 
 .things img{
-    padding-top:20px;
-    width:75px;  
+    padding-top:15px;
+    width:56px;  
 }
 
 #recordHistory{
-    height: 232px;
-    width:350px;
-    font-size: 20px;
+    height: 136px;
+    width:250px;
+    font-size: 12px;
     overflow-y: auto;
-    margin: 5px;
+    margin: 3px;
     border-width:1px;
     border-color:black;
     border-style:solid;
@@ -75,25 +76,25 @@ body{
 
 .header{
     text-align:center;
-    font-size:20px;
+    font-size:12px;
 }
 
 .header img{
-    height:100px;
-    margin:10px;
+    height:70px;
+    margin:5px;
     display:block;
     margin-left: auto;
     margin-right:auto;
 }
 
 #warning{
-    width:400px;
-    height:80px;
+    width:200px;
+    height:40px;
     background:red;
-    font-size: 60px;
+    font-size: 30px;
     position:absolute;
-    left:200px;
-    top:200px;
+    left:165px;
+    top:165px;
     text-align:center;
 }
 
@@ -102,10 +103,10 @@ body{
 }
 
 #muteButton{
-    width:50px;
-    height:50px;
+    width:30px;
+    height:30px;
     position:absolute;
-    left:1095px;
+    left:750px;
     top:20px;
     border:0;
     padding:0;
@@ -113,13 +114,32 @@ body{
 }
 
 #resetButton{
-    width:50px;
-    height:50px;
+    width:30px;
+    height:30px;
     position:absolute;
-    left:1040px;
+    left:715px;
     top:20px;
     border:0;
     padding:0;
     border-radius: 8px;
     background-image: url('reset.png');
+}
+
+#clearButton{
+    position:absolute;
+    left:600px;
+    top:348px;
+}
+
+#info-text{
+    font-size:16px;
+}
+
+#legend{
+    width:80px;
+    height:60px;
+    position:absolute;
+    top:120px;
+    left:710px;
+    background-image:url('legend.png');
 }

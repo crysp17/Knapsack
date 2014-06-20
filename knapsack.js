@@ -12,12 +12,12 @@ $(function(){
     mute.css('background-image', 'url("sound.png")');
     
     //all the things start off in the house
-    for (var i=0; i < things.length;i++){
-        var t = $(things[i])
+    things.each(function(){
+        var t = $(this)
         t.data('location','house');
         t.append("<br>$"+t.data('value')+", "+t.data('weight')+"kg")
 
-    }
+    })
     
     //flashes the too heavy warning
     function tooHeavy(){
@@ -113,7 +113,7 @@ $(function(){
     });
     
     //click intro to start 
-    $('#intro').click(function(event){
+    $('body').click(function(event){
         $('#intro').remove();
     });
     
@@ -163,9 +163,9 @@ $(function(){
     $('#info-text').append("($"+value+", "+weight+"kg)<br>")
     
     //creates a pie chart        
-    var width = 300,
-        height = 250,
-        radius = 100;
+    var width = 200,
+        height = 150,
+        radius = 75;
 
     var color = ['MediumAquaMarine','grey'];
 
@@ -198,29 +198,7 @@ $(function(){
     .attr("d", arc)
     .each(function(d) { this._current = d; }); // store the initial angles   
     
-    //creates a legend for the pie chart
-    count = 0;
-    var legend = svg.selectAll(".legend")
-        .data(data).enter()
-        .append("g").attr("class", "legend")
-        .attr("legend-id", function(d) {
-            return count++;
-        })
-        .attr("transform", function(d, i) {
-            return "translate(-30," + (60 + i * 20) + ")";
-        });
-
-    legend.append("rect")
-        .attr("x", width / 2)
-        .attr("width", 18).attr("height", 18)
-        .style("fill", function(d,i) {
-            return color[i];
-        });
-    legend.append("text").attr("x", width / 2)
-        .attr("y", 9).attr("dy", ".35em")
-        .style("text-anchor", "end").text(function(d) {
-            return d['label'];
-        });
+    
 
 
 });
