@@ -64,9 +64,9 @@ body{
 }
 
 #recordHistory{
-    height: 136px;
+    height: 118px;
     width:250px;
-    font-size: 12px;
+    font-size: 16px;
     overflow-y: auto;
     margin: 3px;
     border-width:1px;
@@ -76,7 +76,7 @@ body{
 
 .header{
     text-align:center;
-    font-size:12px;
+    font-size:16px;
 }
 
 .header img{
@@ -126,7 +126,7 @@ body{
 #clearButton{
     position:absolute;
     left:600px;
-    top:348px;
+    top:350px;
 }
 
 #info-text{

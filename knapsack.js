@@ -164,7 +164,7 @@ $(function(){
     
     //creates a pie chart        
     var width = 200,
-        height = 150,
+        height = 170,
         radius = 75;
 
     var color = ['MediumAquaMarine','grey'];
