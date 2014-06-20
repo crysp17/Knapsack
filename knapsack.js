@@ -2,8 +2,10 @@ $(function(){
     var things=$('.thing');
     var weight=0;
     var value=0;
-    var maxweight=parseInt($('#knapsack').data('maxweight'))
+    var maxweight=parseInt($('#knapsack').data('maxweight'));
+    
     $('#warning').hide();
+    
     var mute=$('#muteButton');
     //set the mute button to not muted
     mute.data('setting','sound');
@@ -157,8 +159,10 @@ $(function(){
           };
     }
     
+    //initializes text with weight and value
     $('#info-text').append("($"+value+", "+weight+"kg)<br>")
-        
+    
+    //creates a pie chart        
     var width = 300,
         height = 250,
         radius = 100;
@@ -194,38 +198,29 @@ $(function(){
     .attr("d", arc)
     .each(function(d) { this._current = d; }); // store the initial angles   
     
-      count = 0;
-      var legend = svg.selectAll(".legend")
-          .data(data).enter()
-          .append("g").attr("class", "legend")
-          .attr("legend-id", function(d) {
-              return count++;
-          })
-          .attr("transform", function(d, i) {
-              return "translate(-30," + (60 + i * 20) + ")";
-          });
+    //creates a legend for the pie chart
+    count = 0;
+    var legend = svg.selectAll(".legend")
+        .data(data).enter()
+        .append("g").attr("class", "legend")
+        .attr("legend-id", function(d) {
+            return count++;
+        })
+        .attr("transform", function(d, i) {
+            return "translate(-30," + (60 + i * 20) + ")";
+        });
 
-      legend.append("rect")
-          .attr("x", width / 2)
-          .attr("width", 18).attr("height", 18)
-          .style("fill", function(d,i) {
-              return color[i];
-          });
-      legend.append("text").attr("x", width / 2)
-          .attr("y", 9).attr("dy", ".35em")
-          .style("text-anchor", "end").text(function(d) {
-              return d['label'];
-          });
+    legend.append("rect")
+        .attr("x", width / 2)
+        .attr("width", 18).attr("height", 18)
+        .style("fill", function(d,i) {
+            return color[i];
+        });
+    legend.append("text").attr("x", width / 2)
+        .attr("y", 9).attr("dy", ".35em")
+        .style("text-anchor", "end").text(function(d) {
+            return d['label'];
+        });
 
-/*        arcs.append("svg:text")                                     //add a label to each slice
-                .attr("transform", function(d) {                    //set the label's origin to the center of the arc
-               
-                d.innerRadius = 0;
-                d.outerRadius = r;
-                return "translate(" + arc.centroid(d) + ")";      
-            })
-            .attr("text-anchor", "middle")                          //center the text on it's origin
-            .text(function(d, i) { return data[i].label; });        //get the label from our original data array*/
 
-    
 });
