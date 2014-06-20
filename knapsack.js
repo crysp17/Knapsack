@@ -169,16 +169,16 @@ $(function(){
 
     var color = ['MediumAquaMarine','grey'];
 
-    var pie = d3.layout.pie()
+    var pie = d3.layout.pie()                       //this will create arc data
         .value(function(d) { return d[weight]; })
         .sort(null);
 
-    var arc = d3.svg.arc()
+    var arc = d3.svg.arc()                          //this will create path elements using arc data
         .innerRadius(0)
         .outerRadius(radius);
 
-    var dic1={'label':'full'};
-    var dic2={'label':'empty'};
+    var dic1={'label':'full'}; //value of "full" slice depending on weight
+    var dic2={'label':'empty'};//value of "empty" slice depending on weight
     for (var i=0; i <= maxweight; i++){
         dic1[i]=i;
         dic2[i]=20-i;
@@ -194,7 +194,7 @@ $(function(){
     var path = svg.datum(data).selectAll("path")
     .data(pie)
     .enter().append("path")
-    .attr("fill", function(d, i) { return color[i]; })
+    .attr("fill", function(d, i) { return color[i]; })  //colors in the slices
     .attr("d", arc)
     .each(function(d) { this._current = d; }); // store the initial angles   
     
